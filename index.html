@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectoCore - National Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS for Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="brand-icon"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                <span class="brand-text">Electo<span>Core</span></span>
+            </div>
+
+            <div class="sidebar-menu">
+                <div class="menu-section">COMMAND CENTER</div>
+                <button class="nav-btn active" data-target="panel-dashboard">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    National Dashboard
+                </button>
+                <button class="nav-btn" data-target="panel-results">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    Live Results
+                </button>
+                <button class="nav-btn" data-target="panel-booth">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    Booth Locator
+                </button>
+                <button class="nav-btn" data-target="panel-candidate">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path></svg>
+                    Candidate Explorer
+                </button>
+                <button class="nav-btn" data-target="panel-intel">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Intel & Alerts
+                </button>
+                
+                <div class="menu-section">SUPPORT & TICKETS</div>
+                <button class="nav-btn" data-target="panel-assistant">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    AI Agent Hub
+                </button>
+                <button class="nav-btn" data-target="panel-complaints">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    Complaints
+                </button>
+
+                <div class="menu-section">CITIZEN PORTAL</div>
+                <button class="nav-btn" data-target="panel-journey">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    My Journey
+                </button>
+                <button class="nav-btn" data-target="panel-gamification">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    Gamification
+                </button>
+                <button class="nav-btn" data-target="panel-leaderboard">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+                    Leaderboard
+                </button>
+                <button class="nav-btn" data-target="panel-learn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    Learn Center
+                </button>
+
+                <div class="menu-section">SETTINGS</div>
+                <button class="nav-btn" data-target="panel-settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    System Settings
+                </button>
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="nav-btn terminate-btn" onclick="window.location.href='login.html'">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Terminate Session
+                </button>
+                <div class="user-profile">
+                    <div class="avatar" id="userAvatar">GU</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userNameDisplay">GUEST USER</div>
+                        <div class="user-role">CITIZEN IDENTITY</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Top Navbar -->
+            <header class="top-navbar">
+                <div class="nav-title">
+                    <h1 id="pageTitle">National Command Center</h1>
+                    <span class="status-badge"><span class="status-dot"></span> Systems Nominal</span>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggleBtn" aria-label="Toggle Theme">
+                        <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
+                    <div class="clock-widget" id="clockWidget">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span id="currentTime">00:00:00 IST</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Panels Container -->
+            <div class="panels-container">
+                
+                <!-- Panel 1: National Dashboard -->
+                <div id="panel-dashboard" class="panel active fade-in">
+                    <div class="panel-header">
+                        <h2>General Election 2026 Phase V</h2>
+                        <p>Live command and intelligence feed. Data synchronizing continuously.</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+                            <div class="stat-info">
+                                <h3>Total Registered Voters</h3>
+                                <div class="stat-value">92,41,08,115</div>
+                            </div>
+                            <div class="stat-badge success">+8,211 today</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
+                            <div class="stat-info">
+                                <h3>Current Turnout %</h3>
+                                <div class="stat-value">68<span class="unit">%</span></div>
+                            </div>
+                            <div class="stat-badge accent">Phase V Live</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path></svg></div>
+                            <div class="stat-info">
+                                <h3>Active Polling Stations</h3>
+                                <div class="stat-value">11,20,540</div>
+                            </div>
+                            <div class="stat-badge danger">8 Incidents</div>
+                        </div>
+                    </div>
+
+                    <div class="charts-grid">
+                        <div class="dashboard-card chart-container">
+                            <h3>Live Hourly Turnout</h3>
+                            <canvas id="turnoutChart"></canvas>
+                        </div>
+                        <div class="dashboard-card phase-progress">
+                            <h3>Phase Progress</h3>
+                            <div class="progress-item">
+                                <div class="progress-label"><span>Phase I - III (Completed)</span><span>100%</span></div>
+                                <div class="progress-bar"><div class="progress-fill success" style="width: 100%;"></div></div>
+                            </div>
+                            <div class="progress-item">
+                                <div class="progress-label"><span>Phase IV (Processing)</span><span>92%</span></div>
+                                <div class="progress-bar"><div class="progress-fill accent" style="width: 92%;"></div></div>
+                            </div>
+                            <div class="progress-item">
+                                <div class="progress-label"><span>Phase V (Live Polling)</span><span class="warning-text">68.2%</span></div>
+                                <div class="progress-bar"><div class="progress-fill warning" style="width: 68.2%;"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 2: Live Results -->
+                <div id="panel-results" class="panel hidden">
+                    <div class="panel-header">
+                        <h2>Live Election Results</h2>
+                        <p>Real-time counting feeds. Data updates automatically.</p>
+                    </div>
+                    <div class="charts-grid results-grid">
+                        <div class="dashboard-card">
+                            <h3>Seat Share Distribution</h3>
+                            <div style="height: 300px; display: flex; justify-content: center; align-items: center;">
+                                <canvas id="seatShareChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="dashboard-card quick-stats">
+                            <h3>Quick Stats</h3>
+                            <div class="stat-box">
+                                <p>Total Votes Counted</p>
+                                <h4>8,12,040</h4>
+                            </div>
+                            <div class="stat-box mt-4">
+                                <p>Results Declared</p>
+                                <h4>0 / 543</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 3: Booth Locator (Map) -->
+                <div id="panel-booth" class="panel hidden">
+                    <div class="panel-header">
+                        <h2>Booth Locator & Queue Intel</h2>
+                        <p>Find your designated polling station and check live wait times.</p>
+                    </div>
+                    <div class="map-layout">
+                        <div class="map-container dashboard-card" id="map"></div>
+                        <div class="map-sidebar dashboard-card">
+                            <h3>Search Directory</h3>
+                            <input type="text" class="search-input" placeholder="Enter Name, PIN or Constituency">
+                            <h4 class="mt-4">Nearby Stations</h4>
+                            
+                            <div class="station-card">
+                                <h5>Kendriya Vidyalaya, Sector 4</h5>
+                                <p>Sector 4, New Delhi</p>
+                                <div class="station-meta">
+                                    <span class="wait-badge warning">Wait: 15m</span>
+                                    <span class="region-badge">New Delhi</span>
+                                </div>
+                            </div>
+                            
+                            <div class="station-card">
+                                <h5>Govt Girls College</h5>
+                                <p>Gole Market, New Delhi</p>
+                                <div class="station-meta">
+                                    <span class="wait-badge danger">Wait: 45m</span>
+                                    <span class="region-badge">New Delhi</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 4: Candidate Explorer -->
+                <div id="panel-candidate" class="panel hidden">
+                    <div class="panel-header">
+                        <h2>Candidate Explorer</h2>
+                        <p>Comprehensive profiles, affidavits, and manifestos for all contesting candidates.</p>
+                    </div>
+                    <div class="candidate-grid" id="candidateGrid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Panel 5: Intel & Alerts -->
+                <div id="panel-intel" class="panel hidden">
+                    <div class="panel-header">
+                        <h2>Intel & Alerts</h2>
+                        <p>Live security and weather updates from the Election Commission.</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="ticker-wrap">
+                            <div class="ticker-heading">BREAKING</div>
+                            <div class="ticker">
+                                <div class="ticker__item">Sector 7 reports heavy rainfall, expect delays.</div>
+                                <div class="ticker__item">EVM replaced at Booth 42 due to technical glitch.</div>
+                                <div class="ticker__item">Phase V polling extended by 1 hour in sensitive zones.</div>
+                            </div>
+                        </div>
+                        <div class="alerts-feed" id="alertsFeed">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 6: AI Agent Hub (Chatbot) -->
+                <div id="panel-assistant" class="panel hidden">
+                    <div class="panel-header">
+                        <h2>AI Agent Hub</h2>
+                        <p>Interact with the ElectoCore Assistant for election rules and guidelines.</p>
+                    </div>
+                    <div class="dashboard-card chat-section">
+                        <div class="chat-window">
+                            <div class="chat-messages" id="chatMessages">
+                                <div class="message bot-message">
+                                    <div class="msg-avatar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
+                                    <div class="msg-content">System Nominal. I am the ElectoCore AI. How can I assist you with the electoral process today?</div>
+                                </div>
+                            </div>
+                            <div class="chat-options" id="chatOptions">
+                                <!-- Options from JS -->
+                            </div>
+                            <div class="chat-input-container">
+                                <input type="text" id="chatInput" placeholder="Enter query parameters...">
+                                <button id="chatSendBtn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 7: Complaints -->
+                <div id="panel-complaints" class="panel hidden">
+                    <div class="panel-header">
+                        <h2>Complaints Portal</h2>
+                        <p>Report model code of conduct violations securely.</p>
+                    </div>
+                    <div class="complaints-layout">
+                        <div class="dashboard-card">
+                            <h3>File a Report</h3>
+                            <form id="complaintForm" class="complaint-form">
+                                <select class="form-control mb-3">
+                                    <option>Select Violation Type</option>
+                                    <option>Voter Intimidation</option>
+                                    <option>Bribing/Cash Distribution</option>
+                                    <option>EVM Malfunction</option>
+                                    <option>Fake News/Hate Speech</option>
+                                </select>
+                                <textarea class="form-control mb-3" rows="4" placeholder="Describe the incident..."></textarea>
+                                <input type="text" class="form-control mb-3" placeholder="Location/Booth Details">
+                                <button type="button" class="btn-primary" onclick="alert('Complaint submitted successfully. Tracking ID: C-9082')">Submit Report</button>
+                            </form>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>My Reports</h3>
+                            <ul class="reports-list">
+                                <li>
+                                    <div class="report-meta"><span>ID: C-1042</span> <span class="badge warning">Investigating</span></div>
+                                    <p>Suspicious activity near Booth 12.</p>
+                                </li>
+                                <li>
+                                    <div class="report-meta"><span>ID: C-0988</span> <span class="badge success">Resolved</span></div>
+                                    <p>Missing name on electoral roll.</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 8: My Journey -->
+                <div id="panel-journey" class="panel hidden">
+                    <div class="panel-header">
+                        <h2>My Civic Journey</h2>
+                        <p>Track your personal progress through the election cycle.</p>
+                    </div>
+                    <div class="dashboard-card journey-timeline">
+                        <div class="journey-item completed">
+                            <div class="j-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                            <div class="j-content">
+                                <h4>Registration Confirmed</h4>
+                                <p>Your name is on the electoral roll. EPIC ID verified.</p>
+                            </div>
+                        </div>
+                        <div class="journey-item completed">
+                            <div class="j-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                            <div class="j-content">
+                                <h4>Polling Booth Assigned</h4>
+                                <p>Kendriya Vidyalaya, Sector 4. Room 102.</p>
+                            </div>
+                        </div>
+                        <div class="journey-item current">
+                            <div class="j-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle></svg></div>
+                            <div class="j-content">
+                                <h4>Cast Your Vote</h4>
+                                <p>Today is polling day! Head to your booth before 6:00 PM.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 9: Gamification -->
+                <div id="panel-gamification" class="panel hidden">
+                    <div class="panel-header">
+                        <h2>Civic Gamification</h2>
+                        <p>Earn badges and points for active democratic participation.</p>
+                    </div>
+                    <div class="badges-grid">
+                        <div class="badge-card earned">
+                            <div class="b-icon">🏆</div>
+                            <h4>Registered Voter</h4>
+                            <p>+50 pts</p>
+                        </div>
+                        <div class="badge-card earned">
+                            <div class="b-icon">📚</div>
+                            <h4>Informed Citizen</h4>
+                            <p>Read 3 manifestos</p>
+                        </div>
+                        <div class="badge-card locked">
+                            <div class="b-icon">🌅</div>
+                            <h4>Early Bird</h4>
+                            <p>Vote before 9 AM</p>
+                        </div>
+                        <div class="badge-card locked">
+                            <div class="b-icon">🛡️</div>
+                            <h4>Vigilante</h4>
+                            <p>Report a valid violation</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 10: Leaderboard -->
+                <div id="panel-leaderboard" class="panel hidden">
+                    <div class="panel-header">
+                        <h2>Constituency Leaderboard</h2>
+                        <p>Top citizens engaged in the democratic process.</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <table class="leaderboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Citizen</th>
+                                    <th>Badges</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboardBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Panel 11: Learn Center -->
+                <div id="panel-learn" class="panel hidden">
+                    <div class="panel-header">
+                        <h2>Learn Center</h2>
+                        <p>Educational resources to empower your vote.</p>
+                    </div>
+                    <div class="learn-grid">
+                        <div class="dashboard-card learn-card">
+                            <div class="l-img">EVM</div>
+                            <h4>How EVMs Work</h4>
+                            <p>Understand the technology behind the Electronic Voting Machine.</p>
+                            <a href="#">Read Guide &rarr;</a>
+                        </div>
+                        <div class="dashboard-card learn-card">
+                            <div class="l-img">VVPAT</div>
+                            <h4>Verifying your Vote</h4>
+                            <p>What is VVPAT and how does it ensure transparency?</p>
+                            <a href="#">Read Guide &rarr;</a>
+                        </div>
+                        <div class="dashboard-card learn-card">
+                            <div class="l-img">LAW</div>
+                            <h4>Voter Rights</h4>
+                            <p>Know your constitutional rights at the polling station.</p>
+                            <a href="#">Read Guide &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 12: System Settings -->
+                <div id="panel-settings" class="panel hidden">
+                    <div class="panel-header">
+                        <h2>System Settings</h2>
+                        <p>Configure your ElectoCore preferences.</p>
+                    </div>
+                    <div class="dashboard-card max-w-2xl">
+                        <div class="setting-item">
+                            <div>
+                                <h4>Push Notifications</h4>
+                                <p class="text-sm">Receive alerts for queue times and breaking news.</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div>
+                                <h4>Data Privacy Mode</h4>
+                                <p class="text-sm">Hide your name from public leaderboards.</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div>
+                                <h4>Language Interface</h4>
+                                <p class="text-sm">Select primary language.</p>
+                            </div>
+                            <select class="form-control w-auto">
+                                <option>English</option>
+                                <option>Hindi</option>
+                                <option>Regional</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
