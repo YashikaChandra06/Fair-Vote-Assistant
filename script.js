@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const htmlElement = document.documentElement;
     
     // Check local storage for theme preference
-    const savedTheme = localStorage.getItem('electocore-theme');
+    const savedTheme = localStorage.getItem('fairvote-theme');
     if (savedTheme) {
         htmlElement.setAttribute('data-theme', savedTheme);
     }
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentTheme = htmlElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         htmlElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('electocore-theme', newTheme);
+        localStorage.setItem('fairvote-theme', newTheme);
         
         // Re-render charts to match theme colors if needed
         if(window.turnoutChartInstance) updateChartColors(window.turnoutChartInstance, newTheme);
@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.textContent = faq;
             btn.addEventListener('click', () => {
                 addUserMessage(faq);
-                setTimeout(() => addBotMessage("I am the ElectoCore AI. You asked: " + faq + ". Retrieving official directives..."), 600);
+                setTimeout(() => addBotMessage("I am the FairVote AI. You asked: " + faq + ". Retrieving official directives..."), 600);
             });
             chatOptions.appendChild(btn);
         });
